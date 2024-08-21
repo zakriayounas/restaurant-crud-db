@@ -29,7 +29,7 @@ const viewRestaurant = (req, res) => {
         db.collection("restaurants")
             .findOne({ _id: new ObjectId(req.params.id) })
             .then((doc) => {
-                res.status(200).json({ ...doc, name: "mike" });
+                res.status(200).json(doc);
             })
             .catch(() =>
                 res.status(500).json({
@@ -45,11 +45,11 @@ const viewRestaurant = (req, res) => {
 }
 const addRestaurant = (req, res) => {
     db = getDb()
-    const book = req.body
+    const restaurant = req.body
     db.collection("restaurants")
-        .insertOne(book)
+        .insertOne(restaurant)
         .then((postResult) => {
-            res.status(200).json({ message: "posted successfully", history_book: { ...book, name: "new author" }, result: postResult });
+            res.status(200).json({ message: "posted successfully", restaurant: restaurant, result: postResult });
         })
         .catch(() =>
             res.status(500).json({
@@ -58,13 +58,13 @@ const addRestaurant = (req, res) => {
         );
 }
 const updateRestaurant = (req, res) => {
-    const updatedBook = req.body
+    const updatedRestaurant = req.body
     if (ObjectId.isValid(req.params.id)) {
         db = getDb()
         db.collection("restaurants")
-            .updateOne({ _id: new ObjectId(req.params.id) }, { $set: updatedBook })
+            .updateOne({ _id: new ObjectId(req.params.id) }, { $set: updatedRestaurant })
             .then((postResult) => {
-                res.status(200).json({ message: "updated successfully", history_book: { ...updatedBook, name: "update author" }, result: postResult });
+                res.status(200).json({ message: "updated successfully", restaurant: updatedRestaurant, result: postResult });
             })
             .catch(() =>
                 res.status(500).json({
